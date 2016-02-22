@@ -1,4 +1,4 @@
-@everywhere function iuwt_decomp(x::Array{Float64,2},scale::Int64;store_c0="no")
+@everywhere function iuwt_decomp(x::Array{Float64,2}, scale::Int64; store_c0=false)
 
     filter = (1/16)*[1,4,6,4,1]
 
@@ -11,20 +11,20 @@
         coeff[:,:,i] = c0 - c1
         c0 = copy(c)
     end
-    if store_c0 == "yes"
+    if store_c0 == true
         return coeff,c0
     else
         return coeff
     end
 end
 
-@everywhere function iuwt_recomp(x::Array{Float64,3},scale::Int64;c0="no")
+@everywhere function iuwt_recomp(x::Array{Float64,3}, scale::Int64; c0=false)
 
     filter = (1/16)*[1,4,6,4,1]
 
     max_scale = size(x,3) + scale
 
-    if c0 != "no"
+    if c0 != false
         println("recomp init with c0")
         recomp = c0
     else
@@ -43,7 +43,7 @@ end
     return recomp
 end
 
-@everywhere function a_trous(c0::Array{Float64,2},filter::Array{Float64,1},scale::Int64)
+@everywhere function a_trous(c0::Array{Float64,2}, filter::Array{Float64,1}, scale::Int64)
 
     scale = scale - 1
     tmp = filter[3]*c0
