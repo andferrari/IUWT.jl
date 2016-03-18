@@ -4,7 +4,7 @@
 
 J.-L. Starck, J. Fadili, and F. Murtagh, “The Undecimated Wavelet Decomposition and its Reconstruction,” *Image Processing, IEEE Transactions on*, vol. 16, no. 2, pp. 297–309, 2007.
 
-Julia implementation is a transcription of this [Python code](https://github.com/ratt-ru/PyMORESANE/blob/master/pymoresane/iuwt.py).
+This Julia implementation is a transcription of this [Python code](https://github.com/ratt-ru/PyMORESANE/blob/master/pymoresane/iuwt.py).
 
 ## Installation
 
