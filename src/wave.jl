@@ -1,4 +1,4 @@
-@everywhere function iuwt_decomp(x::Array{Float64,2}, scale::Int64; store_c0=false)
+function iuwt_decomp(x::Array{Float64,2}, scale::Int64; store_c0=false)
 
     filter = (1/16)*[1,4,6,4,1]
 
@@ -18,7 +18,7 @@
     end
 end
 
-@everywhere function iuwt_recomp(x::Array{Float64,3}, scale::Int64; c0=false)
+function iuwt_recomp(x::Array{Float64,3}, scale::Int64; c0=false)
 
     filter = (1/16)*[1,4,6,4,1]
 
@@ -43,7 +43,7 @@ end
     return recomp
 end
 
-@everywhere function a_trous(c0::Array{Float64,2}, filter::Array{Float64,1}, scale::Int64)
+function a_trous(c0::Array{Float64,2}, filter::Array{Float64,1}, scale::Int64)
 
     scale = scale - 1
     tmp = filter[3]*c0
