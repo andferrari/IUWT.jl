@@ -20,7 +20,4 @@ coef, c0 = iuwt_decomp(x, 7, store_c0 = true);
 norm(x - iuwt_recomp(coef, 0, c0 = c0))
 ```
 
-
-
-
-
+`IUWT.iuwt_decomp_adj()` implements a very slow adjoint operator of the IUWT transform.

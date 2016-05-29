@@ -25,7 +25,6 @@ function iuwt_recomp(x::Array{Float64,3}, scale::Int64; c0=false)
     max_scale = size(x,3) + scale
 
     if c0 != false
-        println("recomp init with c0")
         recomp = c0
     else
         recomp = zeros(Float64,size(x,1),size(x,2))
@@ -76,4 +75,12 @@ function a_trous(c0::Array{Float64,2}, filter::Array{Float64,1}, scale::Int64)
 
     return c1
 
+end
+
+function iuwt_decomp_adj(u,scale)
+    htu = iuwt_decomp(u[:,:,1],1)[:,:,1]
+        for k in 2:scale
+            htu += iuwt_decomp(u[:,:,k],k)[:,:,k]
+        end
+    return htu
 end
