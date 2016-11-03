@@ -51,8 +51,7 @@ function a_trous_v_old(c0::Array{Float64,2}, scale::Int64)
 
   tmp = filter[3]*c0
 
-  tic()
-  for k in 1:N
+    for k in 1:N
   for ind1N in ind1+1:N
       @inbounds tmp[ind1N,k] += filter[1]*c0[ind1N - ind1,k]
   end
@@ -78,11 +77,9 @@ function a_trous_v_old(c0::Array{Float64,2}, scale::Int64)
       @inbounds tmp[N-ind1+ind,k] += filter[5]*c0[N+1-ind,k]
   end
   end
-  toc()
 
   c1 = filter[3]*tmp
 
-  tic()
   for k in 1:N
   for ind1N in ind1+1:N
       @inbounds c1[k,ind1N] += filter[1]*tmp[k,ind1N - ind1]
@@ -109,7 +106,6 @@ function a_trous_v_old(c0::Array{Float64,2}, scale::Int64)
       @inbounds c1[k,N-ind1+ind] += filter[5]*tmp[k,N+1-ind]
   end
   end
-  toc()
 
     return c1
 
@@ -127,7 +123,6 @@ function a_trous(c0::Array{Float64,2}, scale::Int64)
 
   tmp = filter[3]*c0
 
-  tic()
   for k in 1:N
   for ind1N in ind1+1:N
       @inbounds tmp[ind1N,k] += filter[1]*c0[ind1N - ind1,k]
@@ -154,7 +149,6 @@ function a_trous(c0::Array{Float64,2}, scale::Int64)
       @inbounds tmp[N-ind1+ind,k] += filter[5]*c0[N+1-ind,k]
   end
   end
-  toc()
 
   c1 = filter[3]*tmp
   c1=c1'
