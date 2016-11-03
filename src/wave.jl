@@ -53,28 +53,28 @@ function a_trous(c0::Array{Float64,2}, scale::Int64)
 
   for k in 1:N
   for ind1N in ind1+1:N
-      tmp[ind1N,k] += filter[1]*c0[ind1N - ind1,k]
+      @inbounds tmp[ind1N,k] += filter[1]*c0[ind1N - ind1,k]
   end
   for iind1 in 1:ind1
-      tmp[iind1,k] += filter[1]*c0[ind1+1 - iind1,k]
+      @inbounds tmp[iind1,k] += filter[1]*c0[ind1+1 - iind1,k]
   end
   for ind0N in ind0+1:N
-      tmp[ind0N,k] += filter[2]*c0[ind0N - ind0,k]
+      @inbounds tmp[ind0N,k] += filter[2]*c0[ind0N - ind0,k]
   end
   for iind0 in 1:ind0
-      tmp[iind0,k] += filter[2]*c0[ind0+1 - iind0,k]
+      @inbounds tmp[iind0,k] += filter[2]*c0[ind0+1 - iind0,k]
   end
   for ind0N in ind0+1:N
-      tmp[ind0N - ind0,k] += filter[4]*c0[ind0N,k]
+      @inbounds tmp[ind0N - ind0,k] += filter[4]*c0[ind0N,k]
   end
   for ind in 1:ind0
-      tmp[N-ind0 + ind,k] += filter[4]*c0[N+1 - ind,k]
+      @inbounds tmp[N-ind0 + ind,k] += filter[4]*c0[N+1 - ind,k]
   end
   for ind1N in ind1+1:N
-      tmp[ind1N - ind1,k] += filter[5]*c0[ind1N,k]
+      @inbounds tmp[ind1N - ind1,k] += filter[5]*c0[ind1N,k]
   end
   for ind in 1:ind1
-      tmp[N-ind1+ind,k] += filter[5]*c0[N+1-ind,k]
+      @inbounds tmp[N-ind1+ind,k] += filter[5]*c0[N+1-ind,k]
   end
   end
 
@@ -82,28 +82,28 @@ function a_trous(c0::Array{Float64,2}, scale::Int64)
 
   for k in 1:N
   for ind1N in ind1+1:N
-      c1[k,ind1N] += filter[1]*tmp[k,ind1N - ind1]
+      @inbounds c1[k,ind1N] += filter[1]*tmp[k,ind1N - ind1]
   end
   for iind1 in 1:ind1
-      c1[k,iind1] += filter[1]*tmp[k,ind1+1 - iind1]
+      @inbounds c1[k,iind1] += filter[1]*tmp[k,ind1+1 - iind1]
   end
   for ind0N in ind0+1:N
-      c1[k,ind0N] += filter[2]*tmp[k,ind0N - ind0]
+      @inbounds c1[k,ind0N] += filter[2]*tmp[k,ind0N - ind0]
   end
   for iind0 in 1:ind0
-      c1[k,iind0] += filter[2]*tmp[k,ind0+1 - iind0]
+      @inbounds c1[k,iind0] += filter[2]*tmp[k,ind0+1 - iind0]
   end
   for ind0N in ind0+1:N
-      c1[k,ind0N - ind0] += filter[4]*tmp[k,ind0N]
+      @inbounds c1[k,ind0N - ind0] += filter[4]*tmp[k,ind0N]
   end
   for ind in 1:ind0
-      c1[k,N-ind0+ind] += filter[4]*tmp[k,N+1-ind]
+      @inbounds c1[k,N-ind0+ind] += filter[4]*tmp[k,N+1-ind]
   end
   for ind1N in ind1+1:N
-      c1[k,ind1N - ind1] += filter[5]*tmp[k,ind1N - ind1]
+      @inbounds c1[k,ind1N - ind1] += filter[5]*tmp[k,ind1N - ind1]
   end
   for ind in 1:ind1
-      c1[k,N-ind1+ind] += filter[5]*tmp[k,N+1-ind]
+      @inbounds c1[k,N-ind1+ind] += filter[5]*tmp[k,N+1-ind]
   end
   end
     return c1
