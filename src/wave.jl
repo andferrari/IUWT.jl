@@ -6,8 +6,8 @@ function iuwt_decomp(x::Array{Float64,2}, scale::Int64; store_c0=false)
     c0 = copy(x)
 
     for i in 1:scale
-        c = a_trous(c0,filter,i)
-        c1 = a_trous(c,filter,i)
+        c = for_a_trous(c0,filter,i)
+        c1 = for_a_trous(c,filter,i)
         coeff[:,:,i] = c0 - c1
         c0 = copy(c)
     end
@@ -31,11 +31,11 @@ function iuwt_recomp(x::Array{Float64,3}, scale::Int64; c0=false)
     end
 
     for i in range(max_scale,-1,size(x,3))
-        recomp = a_trous(recomp,filter,i) + x[:,:,i-scale]
+        recomp = for_a_trous(recomp,filter,i) + x[:,:,i-scale]
     end
     if scale > 0
         for i in range(scale,-1,scale)
-            recomp = a_trous(recomp,filter,i)
+            recomp = for_a_trous(recomp,filter,i)
         end
     end
 
@@ -72,6 +72,72 @@ function a_trous(c0::Array{Float64,2}, filter::Array{Float64,1}, scale::Int64)
 
     c1[:,1:(end-(2^(scale+1)))] += filter[5]*tmp[:,(2^(scale+1))+1:end]
     c1[:,(end-(2^(scale+1))+1):end] += filter[5]*tmp[:,end:-1:end-2^(scale+1)+1]
+
+    return c1
+
+end
+
+function for_a_trous(c0::Array{Float64,2}, filter::Array{Float64,1}, scale::Int64)
+
+  N = size(c0,1)
+  scale = scale - 1
+
+  ind0 = 2^(scale)
+  ind1 = 2^(scale+1)
+
+  tmp = filter[3]*c0
+
+
+  for ind1N in ind1+1:N
+      tmp[ind1N,:] += filter[1]*c0[ind1N - ind1,:]
+  end
+  for iind1 in 1:ind1
+      tmp[iind1,:] += filter[1]*c0[ind1+1 - iind1,:]
+  end
+  for ind0N in ind0+1:N
+      tmp[ind0N,:] += filter[2]*c0[ind0N - ind0,:]
+  end
+  for iind0 in 1:ind0
+      tmp[iind0,:] += filter[2]*c0[ind0+1 - iind0,:]
+  end
+  for ind0N in ind0+1:N
+      tmp[ind0N - ind0,:] += filter[4]*c0[ind0N,:]
+  end
+  for ind in 1:ind0
+      tmp[N-ind0 + ind,:] += filter[4]*c0[N+1 - ind,:]
+  end
+  for ind1N in ind1+1:N
+      tmp[ind1N - ind1,:] += filter[5]*c0[ind1N,:]
+  end
+  for ind in 1:ind1
+      tmp[N-ind1+ind,:] += filter[5]*c0[N+1-ind,:]
+  end
+  c1 = filter[3]*tmp
+
+  for ind1N in ind1+1:N
+      c1[:,ind1N] += filter[1]*tmp[:,ind1N - ind1]
+  end
+  for iind1 in 1:ind1
+      c1[:,iind1] += filter[1]*tmp[:,ind1+1 - iind1]
+  end
+  for ind0N in ind0+1:N
+      c1[:,ind0N] += filter[2]*tmp[:,ind0N - ind0]
+  end
+  for iind0 in 1:ind0
+      c1[:,iind0] += filter[2]*tmp[:,ind0+1 - iind0]
+  end
+  for ind0N in ind0+1:N
+      c1[:,ind0N - ind0] += filter[4]*tmp[:,ind0N]
+  end
+  for ind in 1:ind0
+      c1[:,N-ind0+ind] += filter[4]*tmp[:,N+1-ind]
+  end
+  for ind1N in ind1+1:N
+      c1[:,ind1N - ind1] += filter[5]*tmp[:,ind1N - ind1]
+  end
+  for ind in 1:ind1
+      c1[:,N-ind1+ind] += filter[5]*tmp[:,N+1-ind]
+  end
 
     return c1
 
