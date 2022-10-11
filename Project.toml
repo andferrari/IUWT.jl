@@ -1,0 +1,4 @@
+name = "IUWT"
+uuid = "0283e1c8-a5c8-4017-84c4-7c819317a0ae"
+authors = ["André Ferrari <andferrari@gmail.com>"]
+version = "0.1.0"
