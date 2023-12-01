@@ -1,10 +1,18 @@
 using IUWT
-using Base.Test
+using LinearAlgebra: norm, dot
+using Test
 
-x = randn(128, 128)
-scale = 7
-coef, c0 = iuwt_decomp(x, scale, store_c0 = true)
- @test_approx_eq_eps norm(x - iuwt_recomp(coef, 0, c0 = c0)) 0.0 1e-10
+@testset "Decomposition/Recomposition" begin
+    x = randn(128, 128)
+    scale = 7
+    coef, c0 = iuwt_decomp(x, scale, store_c0 = true)
+    @test norm(x - iuwt_recomp(coef, 0, c0 = c0)) ≈ 0.0 atol = 1e-10
+end
 
-u = randn(size(coef))
- @test_approx_eq_eps sum(u.*coef) - sum(IUWT.iuwt_decomp_adj(u,scale).*x) 0.0 1e-10
+@testset "Adjoint" begin
+    x = randn(128, 128)
+    scale = 7
+    coef, c0 = iuwt_decomp(x, scale, store_c0 = true)
+    u = randn(size(coef))
+    @test dot(u, coef) ≈ dot(iuwt_decomp_adj(u, scale), x) atol = 1e-10
+end
